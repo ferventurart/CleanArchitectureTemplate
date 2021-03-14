@@ -2,9 +2,9 @@
 
 namespace WebApp
 {
-    public class MappingProfile : Profile
+    public class AutomapperMaps : Profile
     {
-        public MappingProfile()
+        public AutomapperMaps()
         {
            //Mapping Here
            // CreateMap<CatalogItem, CatalogItemDto>();

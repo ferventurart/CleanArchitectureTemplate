@@ -12,7 +12,8 @@ namespace WebApp.Configuration
     {
         public static IServiceCollection AddCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+            services.AddScoped(typeof(IReadRepository<>), typeof(CachedRepository<>));
+            services.AddScoped(typeof(MyRepository<>));
 
             //Services
             //services.AddScoped<IBasketService, BasketService>();

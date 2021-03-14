@@ -22,7 +22,7 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCoreServices(Configuration);
-            services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddAutoMapper(typeof(AutomapperMaps));
             services.AddDbContext<AppDbContext>(c =>c.UseSqlServer(Configuration.GetConnectionString("AppConnection")));
             services.AddRazorPages();
         }
