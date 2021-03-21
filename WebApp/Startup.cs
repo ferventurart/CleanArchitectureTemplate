@@ -24,6 +24,7 @@ namespace WebApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCoreServices(Configuration);
+            services.AddValidators();
             services.AddAutoMapper(typeof(AutomapperMaps));
             services.AddDbContext<AppDbContext>(c =>c.UseSqlServer(Configuration.GetConnectionString("AppConnection")));
 

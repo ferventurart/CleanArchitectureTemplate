@@ -1,0 +1,92 @@
+﻿@page
+@model WebApp.Areas.Alumnos.Pages.CreateModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Crear Alumno";
+    Layout = "_Layout";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-page="Index">Inicio</a></li>
+                    <li class="breadcrumb-item">Catalogos</li>
+                    <li class="breadcrumb-item">Alumnos</li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col align-self-lg-end">
+                <a asp-area="Alumnos" asp-page="Index" class="btn btn-outline-info float-right"><i class="fas fa-arrow-left"></i> Volver al Listado</a>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Llene su formulario correctamente</div>
+            <div class="card-tools">
+
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- form start -->
+            <form method="post" asp-action="Create" autocomplete="off">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="Alumno.Codigo"></label>
+                        <input asp-for="Alumno.Codigo" class="form-control" />
+                        <span asp-validation-for="Alumno.Codigo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Nombre"></label>
+                        <input asp-for="Alumno.Nombre" class="form-control" />
+                        <span asp-validation-for="Alumno.Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Apellido"></label>
+                        <input asp-for="Alumno.Apellido" class="form-control" />
+                        <span asp-validation-for="Alumno.Apellido" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.Genero"></label>
+                        <select asp-for="Alumno.Genero" class="form-control">
+                            <option value="@ApplicationCore.Enum.Genero.Masculino">@ApplicationCore.Enum.Genero.Masculino</option>
+                            <option value="@ApplicationCore.Enum.Genero.Femenino">@ApplicationCore.Enum.Genero.Femenino</option>
+                        </select>
+                        <span asp-validation-for="Alumno.Genero" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Alumno.FechaNacimiento"></label>
+                        <input asp-for="Alumno.FechaNacimiento" class="form-control" />
+                        <span asp-validation-for="Alumno.FechaNacimiento" class="text-danger"></span>
+                    </div>
+                </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar</button> &nbsp;
+            <button type="reset" class="btn btn-warning"><i class="fas fa-eraser"></i> Limpiar</button>
+        </div>
+        </form>
+    </div>
+</section>
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script type="text/javascript" language="javscript">
+        $.validator.unobtrusive.parse(document);
+        $(document).ready(function () {
+            $('#a-alumno').addClass('active');
+        });
+    </script>
+}
