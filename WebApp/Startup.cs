@@ -1,3 +1,5 @@
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 using Infraestructure.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,6 +26,8 @@ namespace WebApp
             services.AddCoreServices(Configuration);
             services.AddAutoMapper(typeof(AutomapperMaps));
             services.AddDbContext<AppDbContext>(c =>c.UseSqlServer(Configuration.GetConnectionString("AppConnection")));
+
+            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
             services.AddRazorPages();
         }
 
@@ -43,6 +47,8 @@ namespace WebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseNotyf();
 
             app.UseRouting();
 

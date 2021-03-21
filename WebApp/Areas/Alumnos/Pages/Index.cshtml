@@ -1,0 +1,169 @@
+﻿@page
+@model WebApp.Areas.Alumnos.Pages.IndexModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Alumnos";
+    Layout = "_Layout";
+}
+@section Styles{
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="~/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@ViewData["Title"]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-area="" asp-page="Index">Inicio</a></li>
+                    <li class="breadcrumb-item">Catalogos</li>
+                    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Listado de @ViewData["Title"]</div>
+            <div class="card-tools">
+                <a asp-area="Alumnos" asp-page="Create" class="btn btn-outline-primary"><i class="fas fa-plus"></i> Nuevo Registro</a>
+            </div>
+        </div>
+        <div class="card-body table-responsive-md p-3">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <select class="form-control" id="pageSize" style="width:75px;">
+                            @foreach (var item in Model.DefaultPagesSizes)
+                            {
+                                if (Model.PageSize == item)
+                                {
+                                    <option selected value="@item">@item</option>
+                                }
+                                else
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-3 offset-md-7">
+                    <div class="form-group float-lg-right">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Buscar" id="searchString" value="@Model.SearchString">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-responsive-md table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:8%;">Id</th>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Genero</th>
+                        <th>Fecha Nacimiento</th>
+                        <th style="width:20%;" class="text-center">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Alumnos.Count > 0)
+                    {
+                        @foreach (var item in Model.Alumnos)
+                        {
+                            <tr>
+                                <td style="width:8%;">@item.Id</td>
+                                <td>@item.Codigo</td>
+                                <td>@item.NombreCompleto()</td>
+                                <td>@item.Genero</td>
+                                <td>@item.FechaNacimiento</td>
+                                <td style="width: 20%;" class="text-center">
+                                    <a class="btn btn-info btn-sm" asp-area="Alumnos" asp-page="Edit" asp-route-id="@item.Id">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">No se encontraron registros</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer clearfix">
+            <div class="float-left">
+                @if (Model.Alumnos.Count > 0)
+                {
+                    <text>Mostrando registros del @(Model.Pager.StartIndex + 1) al @(Model.Pager.EndIndex + 1) de un total de @Model.Pager.TotalItems registros </text>
+                }
+            </div>
+            <ul class="pagination pagination-md m-0 float-right">
+                @if (Model.Alumnos.Count > 0)
+                {
+                    @if (Model.Pager.PreviousPage > 0)
+                    {
+                        <li class="page-item"><a class="page-link" data-page="@Model.Pager.PreviousPage"><i class="fas fa-angle-double-left"></i></a></li>
+                    }
+
+                    @foreach (var item in Model.Pager.Pages)
+                    {
+                        @if (item == Model.Pager.CurrentPage)
+                        {
+                            <li class="page-item active"><a class="page-link" data-page="@item">@item</a></li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" data-page="@item">@item</a></li>
+                        }
+
+                    }
+
+                    @if (Model.Pager.NextPage <= Model.Pager.TotalPages)
+                    {
+                        <li class="page-item"><a class="page-link" data-page="@Model.Pager.NextPage"><i class="fas fa-angle-double-right"></i></a></li>
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <!-- Pager -->
+    <script src="~/js/pager.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="~/plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#a-alumno').addClass('active');
+
+            $('#pageSize').change(function () {
+                filterPaginate("pageSize", $(this).val())
+            });
+            $('.page-link').click(function () {
+                filterPaginate("currentPage", $(this).data("page"))
+            });
+            $('#searchString').on('keyup', function (e) {
+                if (e.key === "Enter" || e.keyCode == 13) {
+                    filterPaginate("searchString", $(this).val());
+                }
+            });
+        });
+    </script>
+}
