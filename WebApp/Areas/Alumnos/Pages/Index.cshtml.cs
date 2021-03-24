@@ -8,6 +8,7 @@ using ApplicationCore.Interfaces;
 using ApplicationCore.Specification;
 using ApplicationCore.Specification.Filters;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Infraestructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -15,10 +16,10 @@ namespace WebApp.Areas.Alumnos.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly IRepository<Alumno> _repository;
+        private readonly MyRepository<Alumno> _repository;
         private INotyfService _notyfService { get; }
 
-        public IndexModel(IRepository<Alumno> repository, INotyfService notyfService)
+        public IndexModel(MyRepository<Alumno> repository, INotyfService notyfService)
         {
             _repository = repository;
             _notyfService = notyfService;

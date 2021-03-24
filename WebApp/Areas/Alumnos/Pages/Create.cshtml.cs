@@ -7,15 +7,16 @@ using ApplicationCore.Interfaces;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Infraestructure.Data;
 
 namespace WebApp.Areas.Alumnos.Pages
 {
     public class CreateModel : PageModel
     {
-        private readonly IRepository<Alumno> _repository;
+        private readonly MyRepository<Alumno> _repository;
         private INotyfService _notyfService { get; }
 
-        public CreateModel(IRepository<Alumno> repository, INotyfService notyfService)
+        public CreateModel(MyRepository<Alumno> repository, INotyfService notyfService)
         {
             _repository = repository;
             _notyfService = notyfService;
