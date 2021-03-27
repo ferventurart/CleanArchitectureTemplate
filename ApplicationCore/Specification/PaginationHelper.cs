@@ -21,12 +21,12 @@ namespace ApplicationCore.Specification
 
         public static int CalculateTake(BaseFilter baseFilter)
         {
-            return CalculateTake(baseFilter.PageSize);
+            return CalculateTake(baseFilter.SizePage);
         }
 
         public static int CalculateSkip(BaseFilter baseFilter)
         {
-            return CalculateSkip(baseFilter.PageSize, baseFilter.Page);
+            return CalculateSkip(baseFilter.SizePage, baseFilter.Page);
         }
     }
 }

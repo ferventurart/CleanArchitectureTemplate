@@ -41,10 +41,10 @@
             <div class="row">
                 <div class="col-sm-2">
                     <div class="form-group">
-                        <select class="form-control" id="pageSize" style="width:75px;">
+                        <select class="form-control" id="sizePage" style="width:75px;">
                             @foreach (var item in Model.UIPagination.SizesPages)
                             {
-                                if (Model.UIPagination.GetPageSize == item)
+                                if (Model.UIPagination.GetsizePage == item)
                                 {
                                     <option selected value="@item">@item</option>
                                 }
@@ -150,8 +150,8 @@
         $(document).ready(function () {
             $('#a-alumno').addClass('active');
 
-            $('#pageSize').change(function () {
-                filterPaginate("pageSize", $(this).val())
+            $('#sizePage').change(function () {
+                filterPaginate("sizePage", $(this).val())
             });
             $('.page-link').click(function () {
                 filterPaginate("currentPage", $(this).data("page"))

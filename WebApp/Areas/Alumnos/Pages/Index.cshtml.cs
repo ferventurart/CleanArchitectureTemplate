@@ -29,17 +29,17 @@ namespace WebApp.Areas.Alumnos.Pages
         public List<Alumno> Alumnos { get; set; }
         public UIPaginationModel UIPagination { get; set; }
 
-        public async Task OnGetAsync(string searchString, int? currentPage, int? pageSize)
+        public async Task OnGetAsync(string searchString, int? currentPage, int? sizePage)
         {
             var totalItems = await _repository.CountAsync(new AlumnoSpec(new AlumnoFilter { Apellido = searchString, LoadChildren = false, IsPagingEnabled = true }));
-            UIPagination = new UIPaginationModel(currentPage, searchString, pageSize, totalItems);
+            UIPagination = new UIPaginationModel(currentPage, searchString, sizePage, totalItems);
 
             Alumnos = await _repository.ListAsync(new AlumnoSpec(
                 new AlumnoFilter
                 {
                     IsPagingEnabled = true,
                     Apellido = UIPagination.SearchString,
-                    PageSize = UIPagination.GetPageSize,
+                    SizePage = UIPagination.GetSizePage,
                     Page = UIPagination.GetCurrentPage
                 })
              );

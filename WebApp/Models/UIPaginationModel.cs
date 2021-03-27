@@ -26,7 +26,7 @@ namespace WebApp.Models
         public int GetCurrentPage => _pager.CurrentPage;
         public int GetTotalPages => _pager.TotalPages;
         public int GetTotalItems => _pager.TotalItems;
-        public int GetPageSize => _pager.SizePage;
+        public int GetSizePage => _pager.SizePage;
         public IEnumerable<int> GetPages => _pager.Pages;
     }
 }
