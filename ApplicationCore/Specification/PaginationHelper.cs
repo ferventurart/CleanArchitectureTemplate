@@ -5,7 +5,7 @@ namespace ApplicationCore.Specification
 {
     public static class PaginationHelper
     {
-        public static readonly int[] DefaultPagesSizes = { 2, 5, 10, 25, 50, 100 };
+        public static readonly int[] DefaultSizesPages = { 5, 10, 25, 50, 100 };
 
         public static int CalculateTake(int pageSize)
         {

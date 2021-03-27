@@ -11,6 +11,7 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using Infraestructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using WebApp.Models;
 
 namespace WebApp.Areas.Alumnos.Pages
 {
@@ -26,35 +27,22 @@ namespace WebApp.Areas.Alumnos.Pages
         }
 
         public List<Alumno> Alumnos { get; set; }
-        public int[] DefaultPagesSizes => PaginationHelper.DefaultPagesSizes;
-        public Pager Pager { get; set; }
-        public string SearchString { get; set; }
-        public int PageSize { get; set; }
-        public int TotalItems { get; set; }
+        public UIPaginationModel UIPagination { get; set; }
 
         public async Task OnGetAsync(string searchString, int? currentPage, int? pageSize)
         {
-            PageSize = pageSize.HasValue ? pageSize.Value : PaginationConstants.DefaultPageSize;
+            var totalItems = await _repository.CountAsync(new AlumnoSpec(new AlumnoFilter { Apellido = searchString, LoadChildren = false, IsPagingEnabled = true }));
+            UIPagination = new UIPaginationModel(currentPage, searchString, pageSize, totalItems);
 
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                SearchString = searchString;
-                TotalItems = await _repository.CountAsync(new AlumnoSpec(new AlumnoFilter { Apellido = searchString, IsPagingEnabled = false }));
-            }
-            else
-            {
-                TotalItems = await _repository.CountAsync(new AlumnoSpec(new AlumnoFilter { IsPagingEnabled = false }));
-            }
-
-            Pager = new Pager(TotalItems, currentPage.HasValue ? currentPage.Value : PaginationConstants.DefaultPage, PageSize);
-
-            var filter = new AlumnoFilter();
-            filter.IsPagingEnabled = true;
-            filter.Apellido = searchString;
-            filter.PageSize = Pager.PageSize;
-            filter.Page = Pager.CurrentPage;
-
-            Alumnos = await _repository.ListAsync(new AlumnoSpec(filter));
+            Alumnos = await _repository.ListAsync(new AlumnoSpec(
+                new AlumnoFilter
+                {
+                    IsPagingEnabled = true,
+                    Apellido = UIPagination.SearchString,
+                    PageSize = UIPagination.GetPageSize,
+                    Page = UIPagination.GetCurrentPage
+                })
+             );
         }
     }
 }

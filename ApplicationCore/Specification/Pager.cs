@@ -8,14 +8,14 @@ namespace ApplicationCore.Specification
     public class Pager
     {
         //1000, 1, 5, 5
-        public Pager(int totalItems, int currentPage, int pageSize, int maxPages = PaginationConstants.DefaultMaxPage)
+        public Pager(int totalItems, int currentPage, int sizePage, int maxPages = PaginationConstants.DefaultMaxPage)
         {
             //validate the page size and setting the default value
-            if (pageSize < 1)
-                pageSize = PaginationConstants.DefaultPageSize;
+            if (sizePage < 1)
+                sizePage = PaginationConstants.DefaultPageSize;
 
             //Calculate Total Pages
-            var totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)pageSize);
+            var totalPages = (int)Math.Ceiling((decimal)totalItems / (decimal)sizePage);
 
             // Enseure current page isn't out of range
             if (currentPage < 1)
@@ -57,8 +57,8 @@ namespace ApplicationCore.Specification
             }
 
             //calculate start and end item indexes
-            var startIndex = (currentPage - 1) * pageSize;
-            var endIndex = Math.Min(startIndex + pageSize + 1, totalItems - 1);
+            var startIndex = (currentPage - 1) * sizePage;
+            var endIndex = Math.Min(startIndex + sizePage + 1, totalItems - 1);
 
             //create an array of pages that can be looped over;
             var pages = Enumerable.Range(startPage, (endPage + 1) - startPage);
@@ -69,7 +69,7 @@ namespace ApplicationCore.Specification
             //Update object instante with all pager properties required view client
             TotalItems = totalItems;
             CurrentPage = currentPage;
-            PageSize = pageSize;
+            SizePage = sizePage;
             TotalPages = totalPages;
             StartPage = startPage;
             EndPage = endPage;
@@ -82,7 +82,7 @@ namespace ApplicationCore.Specification
 
         public int TotalItems { get; private set; }
         public int CurrentPage { get; private set; }
-        public int PageSize { get; private set; }
+        public int SizePage { get; private set; }
         public int TotalPages { get; private set; }
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }

@@ -42,9 +42,9 @@
                 <div class="col-sm-2">
                     <div class="form-group">
                         <select class="form-control" id="pageSize" style="width:75px;">
-                            @foreach (var item in Model.DefaultPagesSizes)
+                            @foreach (var item in Model.UIPagination.SizesPages)
                             {
-                                if (Model.PageSize == item)
+                                if (Model.UIPagination.GetPageSize == item)
                                 {
                                     <option selected value="@item">@item</option>
                                 }
@@ -59,7 +59,7 @@
                 <div class="col-sm-3 offset-md-7">
                     <div class="form-group float-lg-right">
                         <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Buscar" id="searchString" value="@Model.SearchString">
+                            <input type="text" class="form-control" placeholder="Buscar" id="searchString" value="@Model.UIPagination.SearchString">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fas fa-search"></i></span>
                             </div>
@@ -109,22 +109,19 @@
         <!-- /.card-body -->
         <div class="card-footer clearfix">
             <div class="float-left">
-                @if (Model.Alumnos.Count > 0)
-                {
-                    <text>Mostrando registros del @(Model.Pager.StartIndex + 1) al @(Model.Pager.EndIndex + 1) de un total de @Model.Pager.TotalItems registros </text>
-                }
+                Mostrando registros del @(Model.UIPagination.GetStartIndex + 1) al @(Model.UIPagination.GetEndIndex + 1) de un total de @Model.UIPagination.GetTotalItems registros
             </div>
             <ul class="pagination pagination-md m-0 float-right">
                 @if (Model.Alumnos.Count > 0)
                 {
-                    @if (Model.Pager.PreviousPage > 0)
+                    @if (Model.UIPagination.GetPreviousPage > 0)
                     {
-                        <li class="page-item"><a class="page-link" data-page="@Model.Pager.PreviousPage"><i class="fas fa-angle-double-left"></i></a></li>
+                        <li class="page-item"><a class="page-link" data-page="@Model.UIPagination.GetPreviousPage"><i class="fas fa-angle-double-left"></i></a></li>
                     }
 
-                    @foreach (var item in Model.Pager.Pages)
+                    @foreach (var item in Model.UIPagination.GetPages)
                     {
-                        @if (item == Model.Pager.CurrentPage)
+                        @if (item == Model.UIPagination.GetCurrentPage)
                         {
                             <li class="page-item active"><a class="page-link" data-page="@item">@item</a></li>
                         }
@@ -135,9 +132,9 @@
 
                     }
 
-                    @if (Model.Pager.NextPage <= Model.Pager.TotalPages)
+                    @if (Model.UIPagination.GetNextPage <= Model.UIPagination.GetTotalPages)
                     {
-                        <li class="page-item"><a class="page-link" data-page="@Model.Pager.NextPage"><i class="fas fa-angle-double-right"></i></a></li>
+                        <li class="page-item"><a class="page-link" data-page="@Model.UIPagination.GetNextPage"><i class="fas fa-angle-double-right"></i></a></li>
                     }
                 }
             </ul>
