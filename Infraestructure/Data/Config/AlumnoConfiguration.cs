@@ -29,6 +29,8 @@ namespace Infraestructure.Data.Config
 
             builder.Property(ci => ci.FechaNacimiento)
                     .IsRequired();
+
+            builder.Property(ci => ci.Fotografia);
         }
     }
 }

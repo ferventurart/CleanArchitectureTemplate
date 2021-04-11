@@ -11,10 +11,16 @@ namespace ApplicationCore.Entities
         public string Apellido { get; set; }
         public Genero Genero { get; set; }
         public DateTime FechaNacimiento { get; set; }
+        public string Fotografia { get; set; }
 
         public string NombreCompleto()
         {
             return Nombre + ' ' + Apellido;
+        }
+
+        public string NombreFotografia()
+        {
+            return NombreCompleto() + '-' + Guid.NewGuid().ToString();
         }
     }
 }

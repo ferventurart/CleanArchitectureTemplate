@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebApp.Configuration;
+using WebApp.Services;
 
 namespace WebApp
 {
@@ -27,7 +28,7 @@ namespace WebApp
             services.AddValidators();
             services.AddAutoMapper(typeof(AutomapperMaps));
             services.AddDbContext<AppDbContext>(c =>c.UseSqlServer(Configuration.GetConnectionString("AppConnection")));
-
+            services.AddScoped<IFileUploadService, FileUploadService>();
             services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
             services.AddRazorPages();
         }

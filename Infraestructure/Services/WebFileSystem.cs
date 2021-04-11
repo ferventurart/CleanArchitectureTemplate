@@ -1,4 +1,7 @@
-﻿using ApplicationCore.Interfaces;
+﻿using Amazon;
+using Amazon.S3;
+using Amazon.S3.Transfer;
+using ApplicationCore.Interfaces;
 using Infraestructure.Data;
 using Newtonsoft.Json;
 using System;
@@ -13,63 +16,48 @@ namespace Infraestructure.Services
 {
     public class WebFileSystem : IFileSystem
     {
+        private readonly IAppLogger<WebFileSystem> _logger;
 
-        public async Task<bool> SavePicture(string pictureName, string pictureBase64, CancellationToken cancellationToken)
+        public WebFileSystem(IAppLogger<WebFileSystem> logger)
         {
-            if (string.IsNullOrEmpty(pictureBase64) || !await UploadFile(pictureName, Convert.FromBase64String(pictureBase64), cancellationToken))
+            _logger = logger;
+        }
+
+        public async Task<string> SaveImage(Stream stream, string fileName, string bucketName)
+        {
+            try
             {
-                return false;
+                var client = new AmazonS3Client(
+                    "AKIAWCETMD3ZCXJALN4X", 
+                    "MHRQ1SYYdeRliQqupLVF0eClV+Z3D+sHUDmX3KXx", 
+                    RegionEndpoint.USEast1
+                );
+
+                var uploadRequest = new TransferUtilityUploadRequest
+                {
+                    InputStream = stream,
+                    Key = fileName,
+                    BucketName = bucketName,
+                    CannedACL = S3CannedACL.PublicRead
+                };
+
+                var fileTransferUtility = new TransferUtility(client);
+                await fileTransferUtility.UploadAsync(uploadRequest);
+
+                return GetUrlS3(bucketName, fileName);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return null;
             }
 
-            return true;
         }
-
-        private async Task<bool> UploadFile(string fileName, byte[] fileData, CancellationToken cancellationToken)
+    
+        private string GetUrlS3(string bucketName, string fileName)
         {
-            if (!fileData.IsValidImage(fileName))
-            {
-                return false;
-            }
-
-            return await UploadToWeb(fileName, fileData, cancellationToken);
-        }
-
-        private async Task<bool> UploadToWeb(string fileName, byte[] fileData, CancellationToken cancellationToken)
-        {
-            var request = new FileItem
-            {
-                DataBase64 = Convert.ToBase64String(fileData),
-                FileName = fileName
-            };
-            //var content = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-
-            //using var message = await _httpClient.PostAsync(_url, content, cancellationToken);
-            //if (!message.IsSuccessStatusCode)
-            //{
-            //    return false;
-            //}
-
-            return true;
-        }
-    }
-
-    public static class ImageValidators
-    {
-        private const int ImageMaximumBytes = 512000;
-
-        public static bool IsValidImage(this byte[] postedFile, string fileName)
-        {
-            return postedFile != null && postedFile.Length > 0 && postedFile.Length <= ImageMaximumBytes && IsExtensionValid(fileName);
-        }
-
-        private static bool IsExtensionValid(string fileName)
-        {
-            var extension = Path.GetExtension(fileName);
-
-            return string.Equals(extension, ".jpg", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(extension, ".png", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(extension, ".gif", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(extension, ".jpeg", StringComparison.OrdinalIgnoreCase);
+            return $"https://{bucketName}.s3.amazonaws.com/{fileName}";
         }
     }
 }

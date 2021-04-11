@@ -44,7 +44,7 @@
                         <select class="form-control" id="sizePage" style="width:75px;">
                             @foreach (var item in Model.UIPagination.SizesPages)
                             {
-                                if (Model.UIPagination.GetsizePage == item)
+                                if (Model.UIPagination.GetSizePage == item)
                                 {
                                     <option selected value="@item">@item</option>
                                 }
@@ -86,7 +86,10 @@
                             <tr>
                                 <td style="width:8%;">@item.Id</td>
                                 <td>@item.Codigo</td>
-                                <td>@item.NombreCompleto()</td>
+                                <td class="text-wrap">
+                                   <img alt="@item.NombreCompleto()" class="img-fluid img-thumbnail img-size-64" src="@item.Fotografia">
+                                   &nbsp;@item.NombreCompleto()
+                                </td>
                                 <td>@item.Genero</td>
                                 <td>@item.FechaNacimiento</td>
                                 <td style="width: 20%;" class="text-center">
@@ -108,36 +111,7 @@
         </div>
         <!-- /.card-body -->
         <div class="card-footer clearfix">
-            <div class="float-left">
-                Mostrando registros del @(Model.UIPagination.GetStartIndex + 1) al @(Model.UIPagination.GetEndIndex + 1) de un total de @Model.UIPagination.GetTotalItems registros
-            </div>
-            <ul class="pagination pagination-md m-0 float-right">
-                @if (Model.Alumnos.Count > 0)
-                {
-                    @if (Model.UIPagination.GetPreviousPage > 0)
-                    {
-                        <li class="page-item"><a class="page-link" data-page="@Model.UIPagination.GetPreviousPage"><i class="fas fa-angle-double-left"></i></a></li>
-                    }
-
-                    @foreach (var item in Model.UIPagination.GetPages)
-                    {
-                        @if (item == Model.UIPagination.GetCurrentPage)
-                        {
-                            <li class="page-item active"><a class="page-link" data-page="@item">@item</a></li>
-                        }
-                        else
-                        {
-                            <li class="page-item"><a class="page-link" data-page="@item">@item</a></li>
-                        }
-
-                    }
-
-                    @if (Model.UIPagination.GetNextPage <= Model.UIPagination.GetTotalPages)
-                    {
-                        <li class="page-item"><a class="page-link" data-page="@Model.UIPagination.GetNextPage"><i class="fas fa-angle-double-right"></i></a></li>
-                    }
-                }
-            </ul>
+            <partial name="_PaginationUI" model="Model.UIPagination" />
         </div>
     </div>
 </section>

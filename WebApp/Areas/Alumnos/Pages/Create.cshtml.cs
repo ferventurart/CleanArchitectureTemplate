@@ -8,6 +8,9 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Infraestructure.Data;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using WebApp.Services;
 
 namespace WebApp.Areas.Alumnos.Pages
 {
@@ -15,11 +18,13 @@ namespace WebApp.Areas.Alumnos.Pages
     {
         private readonly MyRepository<Alumno> _repository;
         private INotyfService _notyfService { get; }
+        private readonly IFileUploadService _fileUploadService;
 
-        public CreateModel(MyRepository<Alumno> repository, INotyfService notyfService)
+        public CreateModel(MyRepository<Alumno> repository, INotyfService notyfService, IFileUploadService fileUploadService)
         {
             _repository = repository;
             _notyfService = notyfService;
+            _fileUploadService = fileUploadService;
         }
 
         [BindProperty]
@@ -29,12 +34,14 @@ namespace WebApp.Areas.Alumnos.Pages
         {
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPost(IFormFile fileUpload)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    //Alumno.Fotografia = await _fileUploadService.SaveFileOnAWSS3(fileUpload, Alumno.NombreFotografia(), "mycleanarchitecturebucket");
+                    Alumno.Fotografia = await _fileUploadService.SaveFileOnDisk(fileUpload, Alumno.NombreFotografia(), "alumnos");
                     await _repository.AddAsync(Alumno);
                     _notyfService.Success("Alumno agregado exitosamente");
                 }

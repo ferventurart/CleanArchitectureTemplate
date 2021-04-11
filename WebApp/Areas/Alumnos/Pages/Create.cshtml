@@ -41,7 +41,7 @@
         </div>
         <div class="card-body">
             <!-- form start -->
-            <form method="post" asp-action="Create" autocomplete="off">
+            <form method="post" asp-action="Create" autocomplete="off" enctype="multipart/form-data">
                 <div class="card-body">
                     <div class="form-group">
                         <label asp-for="Alumno.Codigo"></label>
@@ -70,6 +70,18 @@
                         <label asp-for="Alumno.FechaNacimiento"></label>
                         <input asp-for="Alumno.FechaNacimiento" class="form-control" />
                         <span asp-validation-for="Alumno.FechaNacimiento" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="fileUpload" accept=".jpg, .jpeg, .png">
+                                <label class="custom-file-label" for="exampleInputFile">Escoger archivo</label>
+                            </div>
+                            <div class="input-group-append">
+                                <span class="input-group-text">Subir</span>
+                            </div>
+                        </div>
+                        <label></label>
                     </div>
                 </div>
         <!-- /.card-body -->

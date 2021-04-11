@@ -1,0 +1,41 @@
+﻿@model Models.UIPaginationModel
+@{
+
+}
+<div class="float-left">
+    @if (Model.GetTotalItems > 0)
+    {
+        <text> Mostrando registros del @(Model.GetStartIndex + 1) al @(Model.GetEndIndex + 1) de un total de @Model.GetTotalItems registros </text>
+    }
+    else
+    {
+        <text> Mostrando registros del 0 al 0 de un total de 0 registros</text>
+    }
+</div>
+<ul class="pagination pagination-md m-0 float-right">
+    @if (Model.GetTotalItems > 0)
+    {
+        @if (Model.GetPreviousPage > 0)
+        {
+            <li class="page-item"><a class="page-link" data-page="@Model.GetPreviousPage"><i class="fas fa-angle-double-left"></i></a></li>
+        }
+
+        @foreach (var item in Model.GetPages)
+        {
+            @if (item == Model.GetCurrentPage)
+            {
+                <li class="page-item active"><a class="page-link" data-page="@item">@item</a></li>
+            }
+            else
+            {
+                <li class="page-item"><a class="page-link" data-page="@item">@item</a></li>
+            }
+
+        }
+
+        @if (Model.GetNextPage <= Model.GetTotalPages)
+        {
+            <li class="page-item"><a class="page-link" data-page="@Model.GetNextPage"><i class="fas fa-angle-double-right"></i></a></li>
+        }
+    }
+</ul>
