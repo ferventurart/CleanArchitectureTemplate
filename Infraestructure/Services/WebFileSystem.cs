@@ -28,8 +28,8 @@ namespace Infraestructure.Services
             try
             {
                 var client = new AmazonS3Client(
-                    "AKIAWCETMD3ZCXJALN4X", 
-                    "MHRQ1SYYdeRliQqupLVF0eClV+Z3D+sHUDmX3KXx", 
+                    "", 
+                    "", 
                     RegionEndpoint.USEast1
                 );
 
